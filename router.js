@@ -81,4 +81,19 @@ router.post("/tasks", (req, res) => {
   res.status(201).json(newTask);
 });
 
+router.delete("/tasks/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const taskIndex = data.findIndex((task) => task.id === id);
+  if (taskIndex === -1) {
+    res.status(404).json({
+      msg: `Task: Id:${id} is not found`,
+    });
+    return;
+  }
+  data.splice(taskIndex, 1);
+  res.status(201).json({
+    msg: `Task: Id:${id} is deleted`,
+  });
+});
+
 module.exports = router;
