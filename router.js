@@ -20,14 +20,14 @@ const data = [
   },
 ];
 
+let id = 4;
+
 router.get("/tasks", (req, res) => {
   const { description } = req.query;
   if (description) {
-    console.log(description);
     const filtered = data.filter((task) =>
       task.description.includes(description)
     );
-    console.log(filtered);
     res.json(filtered);
     return;
   }
@@ -47,9 +47,8 @@ router.get("/tasks/:id", (req, res) => {
   res.json(task);
 });
 
-router.put("./tasks/:id", (req, res) => {
+router.put("/tasks/:id", (req, res) => {
   const id = Number(req.params.id);
-  console.log(id);
   const task = data.find((task) => task.id === id);
   if (!task) {
     res.status(404).json({
@@ -65,8 +64,21 @@ router.put("./tasks/:id", (req, res) => {
   if (done !== undefined) {
     task.done = done;
   }
-  
+
   res.json(task);
+});
+
+router.post("/tasks", (req, res) => {
+  const { description } = req.body;
+  if (description === undefined) {
+    res.status(400).json({
+      msg: "invalid description",
+    });
+    return;
+  }
+  const newTask = { id: id++, description, done: false };
+  data.push(newTask);
+  res.status(201).json(newTask);
 });
 
 module.exports = router;
