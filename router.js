@@ -35,4 +35,16 @@ router.get("/tasks", (req, res) => {
   // return
 });
 
+router.get("/tasks/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const task = data.find((task) => task.id === id);
+  if (!task) {
+    res.status(404).json({
+      msg: "Not found",
+    });
+    return;
+  }
+  res.json(task);
+});
+
 module.exports = router;
